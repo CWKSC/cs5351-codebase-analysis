@@ -17,7 +17,7 @@ jobs:
     - name: Build develop image
       run: >
         docker build ./docs/
-        --file ./docs/Containerfile 
+        --file ./docs/Containerfile.develop
         --tag docusaurus-develop-image
 
     - name: Build release image
