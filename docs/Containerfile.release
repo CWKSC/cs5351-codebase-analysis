@@ -1,6 +1,6 @@
 FROM docusaurus-develop-image
 
-COPY ./workspace /workspace
+COPY . /workspace/docusaurus-website
 
 WORKDIR /workspace/docusaurus-website
 
