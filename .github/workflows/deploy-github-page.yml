@@ -24,7 +24,7 @@ jobs:
 
     - name: Build release image
       run: >
-        docker build ./docs/
+        docker build ./docs/workspace/docusaurus-website/
         --file ./docs/Containerfile.release
         --pull=false
         --tag docusaurus-release-image
