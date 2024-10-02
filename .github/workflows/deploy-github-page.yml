@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "docs/**"
-    branches: [ "main", "feature/setup-github-page-docusaurus" ]
+    branches: [ "main" ]
 
 jobs:
 
@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        ref: feature/setup-github-page-docusaurus
     
     - name: Build develop image
       run: >
