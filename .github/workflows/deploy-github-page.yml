@@ -24,6 +24,7 @@ jobs:
       run: >
         docker build ./docs/
         --file ./docs/Containerfile.release
+        --pull=false
         --tag docusaurus-release-image
 
     - name: Create build folder for receive build from container
