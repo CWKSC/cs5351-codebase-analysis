@@ -1,0 +1,6 @@
+go to "nestjs_swagger" directory
+npm install
+npm run start
+
+swagger url
+http://localhost:4000/api_swagger
