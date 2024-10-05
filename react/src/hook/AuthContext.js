@@ -1,7 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import config from '../config';
+import axios from 'axios';
 import { generateCodeVerifier, generateCodeChallenge } from '../utils/pkce';
-
+import { API } from '../constants/api';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -20,47 +21,53 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const mockApiLogin = (username, password) => {
-    return new Promise((resolve, reject) => {
-      // Simulate network delay
-      setTimeout(() => {
-        // Simple validation logic
-        if (1 == 1) {
-          resolve({
-            status: 200,
-            data: {
-              username: 'admin',
-              name: 'Admin User',
-              token: 'abcdef123456', // Example token
-            },
-          });
-        } else {
-          reject({
-            status: 401,
-            message: 'Invalid username or password',
-          });
-        }
-      }, 1000);
-    });
-  };
-
   const handleGoogleLogin = async () => {
     const codeVerifier = generateCodeVerifier();
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
     localStorage.setItem('code_verifier', codeVerifier);
 
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    const state = 42; // You can implement generateRandomString similarly to codeVerifier
+
     const params = new URLSearchParams({
-      response_type: 'code',
       client_id: config.googleClientId,
-      redirect_uri: 'http://localhost:3000/auth/google/callback',
-      scope: 'openid profile email',
+      redirect_uri: 'http://localhost:3000/loginCallback',
+      response_type: 'code',
+      scope: 'openid email profile',
+      state: state,
       code_challenge: codeChallenge,
       code_challenge_method: 'S256',
     });
-    //console.log(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`)
-    window.location = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  }
+  const handleGoogleCallback = async (code) => {
+
+    console.log(code);
+    const codeVerifier = localStorage.getItem('code_verifier');
+    try {
+      const response = await axios.post(API.GET_TOKEN, {
+        code: code,
+        codeVerifier: codeVerifier,
+        redirectUri: 'http://localhost:3000/LoginCallback',
+      }, { withCredentials: true });
+
+      if (response.status === 200) {
+        //assign token to local storage
+        return response
+      } else {
+        //nothing
+        console.error('Authentication failed:', response);
+        return response
+      }
+    } catch (error) {
+      //most likely server down
+      console.error('Error exchanging code:', error);
+      return {"status":"500"}
+    }
+
   }
 
+  
   const handleGithubLogin = async () => {
     const state = generateCodeVerifier();
     localStorage.setItem('github_state', state);
@@ -76,37 +83,7 @@ export const AuthProvider = ({ children }) => {
     window.location = `https://github.com/login/oauth/authorize?${params.toString()}`;
   };
 
-  const login = async (userData) => {
-    // Before API call (checking)
-    setLoading(true);
-    setAuthError(null);
-    try {
-      const { username, password } = userData; // Destructure username and password
-      const response = await mockApiLogin(username, password); // Correct
 
-      if (response.status === 200) {
-        // After API call
-        setIsAuthenticated(true);
-        setUser(response.data); // Correct
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify(response.data));   //data set jwt in localstorage
-        return response;
-      } else {
-        setAuthError('Login failed.');
-        return response;
-      }
-    } catch (error) {
-      // Handle errors (e.g., invalid credentials)
-      setAuthError(error.message || 'Login failed.');
-      setIsAuthenticated(false);
-      setUser(null);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('user');
-      throw error; // Re-throw to allow further handling if needed
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const logout = () => {
     setIsAuthenticated(false);
@@ -116,15 +93,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      isAuthenticated, 
-      login, 
-      logout, 
-      user, 
-      loading, 
-      authError, 
-      handleGoogleLogin, 
-      handleGithubLogin 
+    <AuthContext.Provider value={{
+      isAuthenticated,
+      logout,
+      user,
+      loading,
+      authError,
+      handleGoogleLogin,
+      handleGoogleCallback,
+      handleGithubLogin
     }}>
       {children}
     </AuthContext.Provider>

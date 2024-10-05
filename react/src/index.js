@@ -9,15 +9,20 @@ import AppRoutes from './routes/AppRoutes';
 import 'semantic-ui-css/semantic.min.css'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import config from './config.js';
+import axios from 'axios';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
+axios.defaults.baseURL=config.backendURL;
+axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 root.render(
 
-    <React.StrictMode>
+  <React.StrictMode>
+    <GoogleOAuthProvider clientId={config.googleClientId}>
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>
-    </React.StrictMode>
+    </GoogleOAuthProvider>
+  </React.StrictMode>
 
 );
 

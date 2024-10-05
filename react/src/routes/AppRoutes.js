@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import schema from "../schema"
 import { BrowserRouter } from "react-router-dom"
 import Dashboard from "../pages/Dashboard"
+import LoginCallback from "../pages/LoginCallback"
 const AppRoutes = ({ isAuthenticated }) => {
     //const methods = useForm({ resolver: yupResolver(schema) });
     return (
@@ -18,8 +19,9 @@ const AppRoutes = ({ isAuthenticated }) => {
 
                     <Routes>
                         <Route exact path={ROUTES.LOGIN} element={<LoginPage />} />
+                        <Route path={ROUTES.LOGIN_CALLBACK} element={<LoginCallback/>} />
                         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
-                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
                         </Route>
                         <Route path={'/'} element={<HomePage />} />
                     </Routes>
