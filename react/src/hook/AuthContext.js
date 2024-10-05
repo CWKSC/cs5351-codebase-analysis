@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import config from '../config';
 import { generateCodeVerifier, generateCodeChallenge } from '../utils/pkce';
@@ -11,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authError, setAuthError] = useState(null);
 
-
   useEffect(() => {
     const storedAuth = localStorage.getItem('isAuthenticated');
     const storedUser = localStorage.getItem('user');
@@ -21,7 +19,6 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
-
 
   const mockApiLogin = (username, password) => {
     return new Promise((resolve, reject) => {
@@ -69,8 +66,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('github_state', state);
 
     const params = new URLSearchParams({
-      client_id: 'YOUR_GITHUB_CLIENT_ID',
-      redirect_uri: 'http://localhost:3000/auth/github/callback',
+      client_id: 'Ov23lifyOYav0e5vYPEJ',
+      redirect_uri: 'http://localhost:8000/login#',
       scope: 'read:user user:email',
       state: state,
       allow_signup: 'true',
@@ -78,6 +75,7 @@ export const AuthProvider = ({ children }) => {
 
     window.location = `https://github.com/login/oauth/authorize?${params.toString()}`;
   };
+
   const login = async (userData) => {
     // Before API call (checking)
     setLoading(true);
@@ -118,7 +116,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, loading, authError, handleGoogleLogin, handleGithubLogin }}>
+    <AuthContext.Provider value={{ 
+      isAuthenticated, 
+      login, 
+      logout, 
+      user, 
+      loading, 
+      authError, 
+      handleGoogleLogin, 
+      handleGithubLogin 
+    }}>
       {children}
     </AuthContext.Provider>
   );

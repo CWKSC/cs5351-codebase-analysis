@@ -9,28 +9,26 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
-const LoginPage = () => {
 
-    const { handleGoogleLogin } = useAuthContext()
+const LoginPage = () => {
+    const { handleGoogleLogin, handleGithubLogin } = useAuthContext();  // Note the change here
     const { t, i18n } = useTranslation();
    
-    return (<>
+    return (
         <Grid textAlign='center' style={{ height: '50vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
-
                 <Header as='h2' color='teal' textAlign='center'>
+                    {t('login.title')}
                 </Header>
-                <Form size='large' >
-
+                <Form size='large'>
                     <Segment stacked>
-                        <Form.Button onClick={()=>handleGoogleLogin()}>Google</Form.Button>
-                        <Form.Button >github</Form.Button>
+                        <Form.Button onClick={() => handleGoogleLogin()}>Google</Form.Button>
+                        <Form.Button onClick={() => handleGithubLogin()}>GitHub</Form.Button>
                     </Segment>
                 </Form>
-
             </Grid.Column>
         </Grid>
-    </>)
+    );
 }
 
 export default LoginPage;
