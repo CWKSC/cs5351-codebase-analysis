@@ -7,6 +7,9 @@ import { ROUTES } from '../constants/routes';
 
 export const AuthContext = createContext();
 
+// Remove this line
+// const GITHUB_CLIENT_ID = 'Ov23liVVZLlEsxcoDUcx';
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);

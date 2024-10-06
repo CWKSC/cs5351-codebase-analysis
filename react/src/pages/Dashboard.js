@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap
 import Sidebar from '../components/Sidebar';
 import ProjectCard from '../components/ProjectCard';
 import ProjectDetail from '../components/ProjectDetail';
+import { FaPlus } from 'react-icons/fa';
+import '../styles/Dashboard.css';
 
 const Dashboard = () => {
   const [menuSelection, setMenuSelection] = useState('dashboard');
@@ -59,7 +61,6 @@ const Dashboard = () => {
 
   // Render main content based on menu selection and project selection
   const renderMainContent = () => {
-    // If a project is selected, show its details
     if (selectedProject) {
       return (
         <ProjectDetail
@@ -70,35 +71,34 @@ const Dashboard = () => {
       );
     }
 
-    // Render content based on menu selection
     switch (menuSelection) {
       case 'dashboard':
         return (
-          <div>
-            <h2>Welcome to the Dashboard</h2>
-            <p>This is the main dashboard area.</p>
+          <div className="fade-in">
+            <h2 className="mb-4">Welcome to the Dashboard</h2>
+            <p>This is the main dashboard area. You can add some statistics or quick actions here.</p>
           </div>
         );
       case 'user':
         return (
-          <div>
-            <h2>User Management</h2>
-            <p>Manage your users here.</p>
+          <div className="fade-in">
+            <h2 className="mb-4">User Management</h2>
+            <p>Manage your users here. You can add a user list or user management features.</p>
           </div>
         );
       case 'projects':
         return (
-          <>
-            <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="fade-in">
+            <div className="d-flex justify-content-between align-items-center mb-4">
               <h2>Projects</h2>
               <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-                + New Project
+                <FaPlus className="me-2" /> New Project
               </Button>
             </div>
             {projects.length === 0 ? (
-              <Alert variant="info">Please create a project.</Alert>
+              <Alert variant="info">You haven't created any projects yet. Click the "New Project" button to get started!</Alert>
             ) : (
-              <Row xs={1} md={3} className="g-4">
+              <Row xs={1} md={2} lg={3} className="g-4">
                 {projects.map((project) => (
                   <Col key={project.id}>
                     <ProjectCard project={project} onSelectProject={handleSelectProject} />
@@ -106,13 +106,13 @@ const Dashboard = () => {
                 ))}
               </Row>
             )}
-          </>
+          </div>
         );
       case 'settings':
         return (
-          <div>
-            <h2>Settings</h2>
-            <p>Configure your application settings here.</p>
+          <div className="fade-in">
+            <h2 className="mb-4">Settings</h2>
+            <p>Configure your application settings here. You can add various configuration options.</p>
           </div>
         );
       default:
@@ -121,20 +121,16 @@ const Dashboard = () => {
   };
 
   return (
-    <Container fluid>
-      <Row>
-        {/* Sidebar */}
+    <Container fluid className="dashboard-container">
+      <Row className="h-100">
         <Col md={2} className="p-0">
-          <Sidebar onSelectMenu={setMenuSelection} />
+          <Sidebar onSelectMenu={setMenuSelection} activeMenu={menuSelection} />
         </Col>
-
-        {/* Main Content */}
-        <Col md={10} className="p-4">
+        <Col md={10} className="main-content">
           {renderMainContent()}
         </Col>
       </Row>
 
-      {/* Create Project Modal */}
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Create New Project</Modal.Title>
