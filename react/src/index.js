@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import './i18n.js'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './hook/AuthContext';
 import AppRoutes from './routes/AppRoutes';

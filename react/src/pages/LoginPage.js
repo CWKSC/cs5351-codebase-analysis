@@ -4,7 +4,6 @@ import { useAuthContext } from '../hook/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { GoogleLogin } from '@react-oauth/google';
 import '../styles/GitHubButton.css';
-
 const LoginPage = () => {
     const { handleGoogleLogin, initiateGitHubLogin } = useAuthContext();
     const { t } = useTranslation();
@@ -26,6 +25,7 @@ const LoginPage = () => {
                                 console.log('Google Login Failed');
                             }}
                         />
+                        <Form.Button onClick={handleGoogleLogin}>Google</Form.Button>
                         <div style={{ marginTop: '10px' }}>
                             <button className="github-button" onClick={initiateGitHubLogin}>
                                 Login with GitHub

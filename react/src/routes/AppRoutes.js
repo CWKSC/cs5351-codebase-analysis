@@ -11,7 +11,9 @@ import schema from "../schema"
 import { BrowserRouter } from "react-router-dom"
 import Dashboard from "../pages/Dashboard"
 import LoginCallback from "../pages/LoginCallback"
-const AppRoutes = ({ isAuthenticated }) => {
+import GoogleLoginCallback from "../pages/GoogleCallback"
+import GithubCallback from "../pages/GithubCallbacks"
+const AppRoutes = () => {
     //const methods = useForm({ resolver: yupResolver(schema) });
     return (
         <BrowserRouter>
@@ -19,8 +21,10 @@ const AppRoutes = ({ isAuthenticated }) => {
 
                     <Routes>
                         <Route exact path={ROUTES.LOGIN} element={<LoginPage />} />
-                        <Route path={ROUTES.LOGIN_CALLBACK} element={<LoginCallback/>} />
-                        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
+                        <Route path={ROUTES.GOOGLE_CALLBACK} element={<GoogleLoginCallback/>} />
+                        <Route path={ROUTES.GITHUB_CALLBACK} element={<GithubCallback/>} />
+                        <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+                        <Route element={<ProtectedRoute/>}>
                             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
                         </Route>
                         <Route path={'/'} element={<HomePage />} />
