@@ -7,9 +7,6 @@ import { ROUTES } from '../constants/routes';
 
 export const AuthContext = createContext();
 
-// Add this constant at the top of your file
-const GITHUB_CLIENT_ID = 'Ov23liVVZLlEsxcoDUcx';
-
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -79,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('github_code_verifier', codeVerifier);
 
     const redirectUri = encodeURIComponent(`http://localhost:3000${ROUTES.LOGIN_CALLBACK}`);
-    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=user&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${config.githubClientId}&redirect_uri=${redirectUri}&scope=user&code_challenge=${codeChallenge}&code_challenge_method=S256`;
     
     window.location.href = githubAuthUrl;
   };
@@ -90,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       const codeVerifier = localStorage.getItem('github_code_verifier');
       
       const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
-        client_id: GITHUB_CLIENT_ID,
+        client_id: config.githubClientId,
         code_verifier: codeVerifier,
         code: code,
       }, {
