@@ -1,22 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
+import LoginCallback from './pages/LoginCallback';
+import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
-import { AuthProvider } from './hook/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
 import { ROUTES } from './constants/routes';
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-          <Route path="/auth/github/callback" element={<LoginPage />} />
-          {/* Other routes... */}
-        </Routes>
-      </AuthProvider>
+      <Routes>
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.LOGIN_CALLBACK} element={<LoginCallback />} />
+        <Route path={ROUTES.HOME} element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+        <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      </Routes>
     </Router>
   );
 }

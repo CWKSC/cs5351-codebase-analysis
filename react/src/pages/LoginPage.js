@@ -1,20 +1,13 @@
-import { Button, Form, Grid, Header, Message, Segment, FormField, Input } from 'semantic-ui-react';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
+import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
 import { useAuthContext } from '../hook/AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import getSchema from '../schema';
 import { useTranslation } from 'react-i18next';
-import { yupResolver } from "@hookform/resolvers/yup";
 import { GoogleLogin } from '@react-oauth/google';
-import { useGoogleLogin } from '@react-oauth/google';
-
-
+import '../styles/GitHubButton.css';
 
 const LoginPage = () => {
-    const { handleGoogleLogin, handleGithubLogin } = useAuthContext();  // Note the change here
-    const { t, i18n } = useTranslation();
+    const { handleGoogleLogin, initiateGitHubLogin } = useAuthContext();
+    const { t } = useTranslation();
 
     return (
         <Grid textAlign='center' style={{ height: '50vh' }} verticalAlign='middle'>
@@ -27,13 +20,17 @@ const LoginPage = () => {
                         <GoogleLogin
                             onSuccess={credentialResponse => {
                                 console.log(credentialResponse);
+                                handleGoogleLogin(credentialResponse);
                             }}
                             onError={() => {
-                                console.log('Login Failed');
+                                console.log('Google Login Failed');
                             }}
-                        />;
-                        <Form.Button onClick={handleGoogleLogin}>Google</Form.Button>
-                        <Form.Button onClick={() => handleGithubLogin()}>GitHub</Form.Button>
+                        />
+                        <div style={{ marginTop: '10px' }}>
+                            <button className="github-button" onClick={initiateGitHubLogin}>
+                                Login with GitHub
+                            </button>
+                        </div>
                     </Segment>
                 </Form>
             </Grid.Column>

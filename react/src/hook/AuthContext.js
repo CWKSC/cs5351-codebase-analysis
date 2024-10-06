@@ -3,7 +3,12 @@ import config from '../config';
 import axios from 'axios';
 import { generateCodeVerifier, generateCodeChallenge } from '../utils/pkce';
 import { API } from '../constants/api';
+import { ROUTES } from '../constants/routes';
+
 export const AuthContext = createContext();
+
+// Add this constant at the top of your file
+const GITHUB_CLIENT_ID = 'Ov23liVVZLlEsxcoDUcx';
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,23 +72,66 @@ export const AuthProvider = ({ children }) => {
 
   }
 
-  
-  const handleGithubLogin = async () => {
-    const state = generateCodeVerifier();
-    localStorage.setItem('github_state', state);
+  const initiateGitHubLogin = async () => {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    
+    localStorage.setItem('github_code_verifier', codeVerifier);
 
-    const params = new URLSearchParams({
-      client_id: 'Ov23lifyOYav0e5vYPEJ',
-      redirect_uri: 'http://localhost:8000/login#',
-      scope: 'read:user user:email',
-      state: state,
-      allow_signup: 'true',
-    });
-
-    window.location = `https://github.com/login/oauth/authorize?${params.toString()}`;
+    const redirectUri = encodeURIComponent(`http://localhost:3000${ROUTES.LOGIN_CALLBACK}`);
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=user&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+    
+    window.location.href = githubAuthUrl;
   };
 
+  const handleGitHubLogin = async (code) => {
+    try {
+      console.log('Exchanging code for access token');
+      const codeVerifier = localStorage.getItem('github_code_verifier');
+      
+      const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
+        client_id: GITHUB_CLIENT_ID,
+        code_verifier: codeVerifier,
+        code: code,
+      }, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
 
+      const { access_token } = tokenResponse.data;
+
+      if (access_token) {
+        console.log('Access token received');
+        localStorage.setItem('github_token', access_token);
+
+        console.log('Fetching user profile');
+        const userResponse = await axios.get('https://api.github.com/user', {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+
+        const userProfile = userResponse.data;
+        console.log('User profile received:', userProfile);
+
+        setUser(userProfile);
+        setIsAuthenticated(true);
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('user', JSON.stringify(userProfile));
+
+        console.log('Authentication complete');
+        return Promise.resolve();
+      } else {
+        throw new Error('Failed to get access token');
+      }
+    } catch (error) {
+      console.error('GitHub login error:', error);
+      return Promise.reject(error);
+    } finally {
+      localStorage.removeItem('github_code_verifier');
+    }
+  };
 
   const logout = () => {
     setIsAuthenticated(false);
@@ -101,7 +149,8 @@ export const AuthProvider = ({ children }) => {
       authError,
       handleGoogleLogin,
       handleGoogleCallback,
-      handleGithubLogin
+      handleGitHubLogin,
+      initiateGitHubLogin
     }}>
       {children}
     </AuthContext.Provider>
