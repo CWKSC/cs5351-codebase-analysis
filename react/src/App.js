@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import LoginCallback from './pages/LoginCallback';
 import HomePage from './pages/HomePage';
+import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { ROUTES } from './constants/routes';
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path={ROUTES.LOGIN_CALLBACK} element={<LoginCallback />} />
         <Route path={ROUTES.HOME} element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
         <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

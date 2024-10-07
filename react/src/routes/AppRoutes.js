@@ -13,6 +13,7 @@ import Dashboard from "../pages/Dashboard"
 import LoginCallback from "../pages/LoginCallback"
 import GoogleLoginCallback from "../pages/GoogleCallback"
 import GithubCallback from "../pages/GithubCallbacks"
+import RegisterPage from '../pages/RegisterPage'; // Add this line
 const AppRoutes = () => {
     //const methods = useForm({ resolver: yupResolver(schema) });
     return (
@@ -21,6 +22,7 @@ const AppRoutes = () => {
 
                     <Routes>
                         <Route exact path={ROUTES.LOGIN} element={<LoginPage />} />
+                        <Route exact path={ROUTES.REGISTER} element={<RegisterPage />} />
                         <Route path={ROUTES.GOOGLE_CALLBACK} element={<GoogleLoginCallback/>} />
                         <Route path={ROUTES.GITHUB_CALLBACK} element={<GithubCallback/>} />
                         <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
