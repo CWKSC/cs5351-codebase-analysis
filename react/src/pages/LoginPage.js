@@ -7,6 +7,8 @@ import '../styles/GitHubButton.css';
 import '../styles/LoginPage.css';
 import { FaUser, FaLock, FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"; // Import Google icon
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 const LoginPage = () => {
     const { handleGoogleLogin, initiateGitHubLogin } = useAuthContext();
@@ -28,13 +30,13 @@ const LoginPage = () => {
 
                     <div className='remember-forgot'>
                         <label><input type="checkbox" />Remember me</label>
-                        <a href="">Forgot Password</a>
+                        <Link to={ROUTES.FORGET_PASSWORD}>Forgot Password</Link>
                     </div>
 
                     <button type='submit'>Login</button>
 
                     <div className='register-link'>
-                        <p>Don't have an account? <a href="/register">Register</a></p>
+                        <p>Don't have an account? <a href="/registration">Register</a></p>
                     </div>
 
                     <div className='alternative-login'>
@@ -59,6 +61,7 @@ const LoginPage = () => {
                         </button>
                         
                         <button className="github-button" onClick={initiateGitHubLogin}>
+                            <FaGithub className="button-icon" />
                             <span>Login with GitHub</span>
                         </button>
                     </div>

@@ -1,112 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+  
 :root {
-  --primary-color: #3498db;
-  --primary-dark: #2980b9;
-  --secondary-color: #2ecc71;
-  --background-dark: #34495e;
-  --background-light: #ecf0f1;
-  --text-color: #2c3e50;
-  --text-light: #bdc3c7;
+  --yellow: linear-gradient(180deg, #F8D49A -146.42%, #FAD79D -46.42%);
+  --orange: #fca61f;
+  --black: #242d49;
+  --gray: #788097;
+  --purple: linear-gradient(180deg, #BB67FF 0%, #C484F3 100%);
+  --pink: #FF919D;
+  --glass: rgba(255, 255, 255, 0.54);
+  --boxShadow: 0px 19px 60px rgb(0 0 0 / 8%);
+  --smboxShadow: -79px 51px 60px rgba(0, 0, 0, 0.08);
+  --activeItem: #f799a354;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  color: var(--text-color);
-}
-
-.dashboard-container {
-  min-height: 100vh;
-  background-color: var(--background-light);
-}
-
-.sidebar {
-  background-color: var(--background-dark);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.sidebar .nav-link {
-  color: var(--text-light);
-  transition: all 0.3s ease;
-}
-
-.sidebar .nav-link:hover,
-.sidebar .nav-link.active {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.sidebar .nav-link.active {
-  border-left: 4px solid var(--primary-color);
-}
-
-.main-content {
-  padding: 2rem;
-}
-
-.card {
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-dark);
-}
-
-.project-card {
-  height: 100%;
-}
-
-.project-card .card-body {
+.App{
+  /*padding: 0.5rem 3.5rem*/ 
+  color: var(--black);
+  background: linear-gradient(
+    106.37deg,
+    #ffe1bc 29.63%,
+    #ffcfd1 51.55%,
+    #f3c6f1 90.85%
+  );
+  height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
 }
 
-.project-card .card-title {
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+.AppGlass {
+  display: grid;
+  height: 97%;
+  width: 97%;
+  background: var(--glass);
+  border-radius: 2rem;
+  gap: 16px;
+  grid-template-columns: 11rem auto 20rem;
+  overflow: hidden;
 }
 
-.project-card .text-muted {
-  font-size: 0.875rem;
-}
 
-.modal-content {
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-  background-color: var(--primary-color);
-  color: white;
-  border-bottom: none;
-}
-
-.modal-footer {
-  border-top: none;
-}
-
-.form-control:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}

@@ -140,6 +140,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
+  const handleForgetPassword = async (email) => {
+    try {
+      // Implement your forget password logic here
+      // This might involve calling an API endpoint
+      console.log('Forget password requested for:', email);
+      // You might want to show a success message to the user
+    } catch (error) {
+      console.error('Error in forget password:', error);
+      // Handle the error (e.g., show an error message to the user)
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       isAuthenticated,
@@ -150,7 +162,8 @@ export const AuthProvider = ({ children }) => {
       handleGoogleLogin,
       handleGoogleCallback,
       handleGitHubLogin,
-      initiateGitHubLogin
+      initiateGitHubLogin,
+      handleForgetPassword
     }}>
       {children}
     </AuthContext.Provider>

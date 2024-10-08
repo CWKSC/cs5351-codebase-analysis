@@ -1,46 +1,75 @@
-// src/components/Sidebar.js
-import React from 'react';
-import { Nav } from 'react-bootstrap';
-import {
-  FaTachometerAlt,
-  FaUser,
-  FaProjectDiagram,
-  FaCog,
-  FaSignOutAlt,
-} from 'react-icons/fa';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Sidebar.css';
+import { SidebarData } from './Data';
+import { UilSignOutAlt } from '@iconscout/react-unicons';
+import ConfirmDialog from './ConfirmDialog';
+import { useAuthContext } from '../hook/AuthContext';
+import { ROUTES } from '../constants/routes';
+import '../styles/ConfirmDialog.css';
 
-const Sidebar = ({ onSelectMenu, activeMenu }) => {
-  const menuItems = [
-    { key: 'dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-    { key: 'user', icon: FaUser, label: 'User' },
-    { key: 'projects', icon: FaProjectDiagram, label: 'Projects' },
-    { key: 'settings', icon: FaCog, label: 'Settings' },
-  ];
+const Sidebar = () => {
+  const [selected, setSelected] = useState(0);
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuthContext();
+
+  const handleLogout = () => {
+    setIsLogoutConfirmOpen(true);
+  };
+
+  const confirmLogout = () => {
+    logout();
+    setIsLogoutConfirmOpen(false);
+    navigate(ROUTES.LOGIN);
+  };
+
+  const closeLogoutDialog = () => {
+    setIsLogoutConfirmOpen(false);
+  };
 
   return (
-    <Nav className="flex-column vh-100 sidebar py-4">
-      <h3 className="text-center mb-4 text-white">MyApp</h3>
-      {menuItems.map((item) => (
-        <Nav.Link
-          key={item.key}
-          onClick={() => onSelectMenu(item.key)}
-          className={`d-flex align-items-center py-3 ${
-            activeMenu === item.key ? 'active' : ''
-          }`}
-        >
-          <item.icon className="me-3" /> {item.label}
-        </Nav.Link>
-      ))}
-      <div className="mt-auto">
-        <Nav.Link
-          onClick={() => onSelectMenu('logout')}
-          className="d-flex align-items-center py-3"
-        >
-          <FaSignOutAlt className="me-3" /> Logout
-        </Nav.Link>
+    <div className='Sidebar'>
+      {/* logo */}
+      <div className='logo'>
+        <img src={process.env.PUBLIC_URL + '/images/app-logo.png'} alt='logo' />
+        <span>
+          <span>A</span>pp
+        </span>
       </div>
-    </Nav>
-  );
+
+      {/* menu */}
+      <div className='menu'>
+        {SidebarData.map((item, index) => {
+          return (
+            <div 
+              className={selected === index ? 'menuItem active' : 'menuItem'} 
+              key={index}
+              onClick={() => setSelected(index)}
+            >
+              <item.icon />
+              <span>
+                {item.heading}
+              </span>
+            </div>
+          )
+        })}
+
+        <div className='menuItem' onClick={handleLogout}>
+          <UilSignOutAlt />
+          <span>Logout</span>
+        </div>
+      </div>
+
+      {/* confirm logout dialog */}
+      <ConfirmDialog
+        isOpen={isLogoutConfirmOpen}
+        onClose={closeLogoutDialog}
+        onConfirm={confirmLogout}
+        message="Are you sure you want to logout?"
+      />
+    </div>
+  )
 };
 
 export default Sidebar;
